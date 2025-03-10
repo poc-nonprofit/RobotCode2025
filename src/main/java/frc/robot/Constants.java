@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -82,6 +83,13 @@ public final class Constants
         // モーターギア : ホイールギア比 = 8.14:1
         public static double gearRatio = 8.14;
         public static double defaultPeriod = TimedRobot.kDefaultPeriod;
+
+        public static class ModuleOffset{
+            public static final Rotation2d FL = Rotation2d.kZero;
+            public static final Rotation2d FR = Rotation2d.kZero;
+            public static final Rotation2d RL = Rotation2d.kZero;
+            public static final Rotation2d RR = Rotation2d.kZero;
+        }
 
     }
 }

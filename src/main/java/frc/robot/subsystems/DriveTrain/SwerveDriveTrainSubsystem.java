@@ -38,25 +38,29 @@ public class SwerveDriveTrainSubsystem extends SubsystemBase {
         SwervePosition.FRONT_RIGHT,
         Constants.DriveMotorPort.FRONT_RIGHT,
         Constants.SteeringMotorPort.FRONT_RIGHT,
-        Constants.CANCoderPort.FRONT_RIGHT
+        Constants.CANCoderPort.FRONT_RIGHT,
+        Constants.SwerveConstants.ModuleOffset.FR
     );
     private final DriveModule swerveFL = new DriveModule(
         SwervePosition.FRONT_LEFT,
         Constants.DriveMotorPort.FRONT_LEFT,
         Constants.SteeringMotorPort.FRONT_LEFT,
-        Constants.CANCoderPort.FRONT_LEFT
+        Constants.CANCoderPort.FRONT_LEFT,
+        Constants.SwerveConstants.ModuleOffset.FL
     );
     private final DriveModule swerveRL = new DriveModule(
         SwervePosition.REAR_LEFT,
         Constants.DriveMotorPort.REAR_LEFT,
         Constants.SteeringMotorPort.REAR_LEFT,
-        Constants.CANCoderPort.REAR_LEFT
+        Constants.CANCoderPort.REAR_LEFT,
+        Constants.SwerveConstants.ModuleOffset.RL
     );
     private final DriveModule swerveRR = new DriveModule(
         SwervePosition.REAR_RIGHT,
         Constants.DriveMotorPort.REAR_RIGHT,
         Constants.SteeringMotorPort.REAR_RIGHT,
-        Constants.CANCoderPort.REAR_RIGHT
+        Constants.CANCoderPort.REAR_RIGHT,
+        Constants.SwerveConstants.ModuleOffset.RR
     );
 
     private final SwerveDriveKinematics kinematics =
@@ -98,6 +102,13 @@ public class SwerveDriveTrainSubsystem extends SubsystemBase {
         );
     }
 
+    private void setState(SwerveModuleState[] state) {
+        swerveFL.setState(state[0]);
+        swerveFR.setState(state[1]);
+        swerveRL.setState(state[2]);
+        swerveRR.setState(state[3]);
+    }
+
     private void drive(double x, double y, double rot) {
         //1フレームあたりの移動量を取得
         SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(
@@ -109,13 +120,13 @@ public class SwerveDriveTrainSubsystem extends SubsystemBase {
             )
         );
         SwerveDriveKinematics.desaturateWheelSpeeds(states, this.movementSpeed);
+        this.setState(states);
     }
 
     private Command changeSpeed(boolean increase) {
         return runOnce(()->{
             this.movementSpeed += increase ? 0.1:-0.1;
             this.movementSpeed = MathUtil.clamp(this.movementSpeed,0,1);
-
         });
     }
     private Command changeRotateSpeed(boolean increase) {
