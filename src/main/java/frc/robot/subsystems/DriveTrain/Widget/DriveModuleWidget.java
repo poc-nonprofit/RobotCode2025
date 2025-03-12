@@ -11,6 +11,8 @@ import java.util.Map;
 public class DriveModuleWidget {
 
     private final String identifier;
+
+    //Operator Console Dashboardのウィジェット
     private GenericEntry driveMotorWidget;
     private GenericEntry rotateMotorWidget;
 
@@ -24,6 +26,7 @@ public class DriveModuleWidget {
         this.initialize();
     }
 
+    //ウィジェットの初期化(配置・型設定・初期値)
     private void initialize() {
         driveMotorWidget = Shuffleboard.getTab("Swerve " + identifier)
             .add("Drive Motor Output" + identifier, 0.0)
@@ -56,7 +59,11 @@ public class DriveModuleWidget {
             .getEntry();
     }
 
-    public void setState(SwerveModuleState state) {
-
+    public void setMotorState(double driveMotor,double steeringMotor) {
+        driveMotorWidget.setDouble(driveMotor);
+        rotateMotorWidget.setDouble(steeringMotor);
+    }
+    public void setEncoderValue(double encoder) {
+        encoderWidget.setDouble(encoder);
     }
 }
