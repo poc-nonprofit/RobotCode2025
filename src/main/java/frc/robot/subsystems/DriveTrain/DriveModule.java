@@ -31,6 +31,7 @@ public class DriveModule {
     private final SparkClosedLoopController driveCloopController;
     private final SparkClosedLoopController steeringCloopController;
 
+    //車輪角度のオフセット
     private final Rotation2d offsetAngle;
 
     private SwerveModuleState currentState;
@@ -59,6 +60,7 @@ public class DriveModule {
 
     }
 
+    //エンコーダーの値を取得してSwerveModulePositionとして返す
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
             driveMotor.getAbsoluteEncoder().getPosition() / Constants.SwerveConstants.gearRatio
@@ -69,11 +71,19 @@ public class DriveModule {
 
 
     public void setState(SwerveModuleState state){
+        //角度の最適化(角度差π以上の場合π以下になるように調整)
         state.optimize(Rotation2d.fromRotations(encoder.getPosition().getValue().in(Units.Rotations)));
-
+        //閉ループ制御で目標値をセット(出力はモータードライバーが調整
         driveCloopController.setReference(state.speedMetersPerSecond, SparkBase.ControlType.kVelocity);
         steeringCloopController.setReference(state.angle.getRadians(), SparkBase.ControlType.kPosition);
         currentState = state;
+        this.setWidget();
+
         //driveMotor.set(state.angle);
+    }
+
+    private void setWidget(){
+        widget.setMotorState(driveMotor.getAppliedOutput(),steeringMotor.getAppliedOutput());
+        widget.setEncoderValue(encoder.getAbsolutePosition().getValue().in(Units.Degree));
     }
 }
