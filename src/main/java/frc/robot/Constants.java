@@ -24,6 +24,7 @@ public final class Constants
     public static class OperatorConstants
     {
         public static final int DRIVER_CONTROLLER_PORT = 0;
+        public static final int OPERATOR_CONTROLLER_PORT = 1;
         public static final double CONTROLLER_LEFT_DEADZONE_X = 0.05;
         public static final double CONTROLLER_LEFT_DEADZONE_Y = 0.05;
         public static final double CONTROLLER_RIGHT_DEADZONE_X = 0.05;
@@ -72,18 +73,21 @@ public final class Constants
         public static final double wheelRaduis = Units.Meters.convertFrom(5.08, Units.Centimeter);
         //モーター内蔵のエンコーダーの解像度(42カウント/一周)
         public static final int brushlessMotorResolution = 42;
-        //角速度のデフォルト値,45 deg/s
-        public static double defaultAngularSpeed = Math.PI / 8;
-        //速度のデフォルト値
-        public static final double defaultMaxSpeed = 0.2;
-        //最大速度, 180deg/s
-        public static final double maxAngularSpeed = Math.PI;
+        //速度のデフォルト値(m/s)
+        public static final double defaultSpeed = 0.2;
+        //最大速度 (m/s)
+        public static final double maxMovementSpeed = 5.0;
+        //角速度のデフォルト値,30 deg/s
+        public static double defaultAngularSpeed = Math.PI / 6;
+        //最大角速度, 360deg/s
+        public static final double maxAngularSpeed = 2*Math.PI;
         //フィールド相対のデフォルト
         public static final boolean defaultFieldOriented = false;
-        // モーターギア : ホイールギア比 = 8.14:1
+        //モーターギア : ホイールギア比 = 8.14:1
         public static double gearRatio = 8.14;
         public static double defaultPeriod = TimedRobot.kDefaultPeriod;
 
+        //スワーブ車輪の角度のオフセット
         public static class ModuleOffset{
             public static final Rotation2d FL = Rotation2d.kZero;
             public static final Rotation2d FR = Rotation2d.kZero;
