@@ -1,6 +1,5 @@
 package frc.robot.subsystems.DriveTrain.Widget;
 
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -19,7 +18,7 @@ public class DriveModuleWidget {
     private GenericEntry encoderWidget;
     private GenericEntry rotationWidget;
 
-    private GenericEntry driveEncoderWidget;
+    private GenericEntry steeringEncoderWidget;
 
     public DriveModuleWidget(SwervePosition pos) {
         this.identifier = pos.toString();
@@ -43,7 +42,7 @@ public class DriveModuleWidget {
             .getEntry();
 
         encoderWidget = Shuffleboard.getTab("Swerve " + identifier)
-            .add("CANCODER Value " + identifier, 0.0)
+            .add("CANCODER Value  (degree)" + identifier, 0.0)
             .withPosition(2, 0)
             .withSize(2, 1)
             .getEntry();
@@ -54,16 +53,21 @@ public class DriveModuleWidget {
             .withProperties(Map.of("min", -180, "max", 180))
             .getEntry();
 
-        driveEncoderWidget = Shuffleboard.getTab("Swerve " + identifier)
-            .add("DRIVE ENCODER VALUE", 0)
+        steeringEncoderWidget = Shuffleboard.getTab("Swerve " + identifier)
+            .add("STEERING MOTOR ENCODER VALUE", 0)
             .getEntry();
     }
 
     public void setMotorState(double driveMotor,double steeringMotor) {
-        driveMotorWidget.setDouble(driveMotor);
-        rotateMotorWidget.setDouble(steeringMotor);
+        this.driveMotorWidget.setDouble(driveMotor);
+        this.rotateMotorWidget.setDouble(steeringMotor);
     }
     public void setEncoderValue(double encoder) {
-        encoderWidget.setDouble(encoder);
+
+        this.encoderWidget.setDouble(encoder);
+        this.rotationWidget.setDouble(encoder);
+    }
+    public void setSteeringEncoderWidget(double steeringEncoder) {
+        this.steeringEncoderWidget.setDouble(steeringEncoder);
     }
 }
