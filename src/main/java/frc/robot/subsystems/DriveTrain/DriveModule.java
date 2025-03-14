@@ -6,12 +6,14 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import frc.robot.Config;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain.Widget.DriveModuleWidget;
 import frc.robot.utils.enums.SwerveDrive.SwervePosition;
@@ -55,9 +57,9 @@ public class DriveModule {
         this.steeringCloopController = this.steeringMotor.getClosedLoopController();
         this.offsetAngle = offset;
         this.widget = new DriveModuleWidget(pos);
-        this.driveEncoder.setPosition(0);
-
-
+        this.driveEncoder.setPosition(this.encoder.getAbsolutePosition().getValue().in(Units.Radian));
+        this.driveMotor.configure(Config.drivingConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+        this.steeringMotor.configure(Config.steeringConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
     }
 
     //エンコーダーの値を取得してSwerveModulePositionとして返す
@@ -67,6 +69,13 @@ public class DriveModule {
             * Constants.SwerveConstants.wheelRaduis * 2 * Math.PI/* add gear ratio calc */,
             Rotation2d.fromRotations(encoder.getAbsolutePosition().getValue().in(Units.Rotations))
             );
+    }
+
+    public SwerveModuleState getState(){
+        return new SwerveModuleState(
+            driveEncoder.getVelocity(),
+            Rotation2d.fromRotations(encoder.getAbsolutePosition().getValue().in(Units.Rotations))
+        );
     }
 
 
@@ -85,5 +94,6 @@ public class DriveModule {
     private void setWidget(){
         widget.setMotorState(driveMotor.getAppliedOutput(),steeringMotor.getAppliedOutput());
         widget.setEncoderValue(encoder.getAbsolutePosition().getValue().in(Units.Degree));
+        widget.setSteeringEncoderWidget(steeringEncoder.getPosition());
     }
 }
