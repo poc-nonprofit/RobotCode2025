@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DriveTrain.SwerveDriveTrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,6 +28,8 @@ public class RobotContainer {
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     //スワーブを管理するサブシステムのインスタンス
     private final SwerveDriveTrainSubsystem swerveDriveTrainSubsystem = SwerveDriveTrainSubsystem.getInstance();
+    //カメラサーバー
+    private final CameraSubsystem cameraSubsystem = CameraSubsystem.getInstance();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController driverController =
@@ -41,12 +44,23 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the trigger bindings
         configureBindings();
+        //カメラ始動
+        //cameraSubsystem.start();
 
+        //デフォルトコマンド. ずっと実行
+        /*swerveDriveTrainSubsystem.setDefaultCommand(
+            new RunCommand(() -> swerveDriveTrainSubsystem.drive(
+                driverController.getLeftY(), //左スティック縦軸
+                driverController.getLeftX(), //左スティック横軸
+                driverController.getRightX() //右スティック横軸
+            ),swerveDriveTrainSubsystem)
+        );*/
+        //ドライバの要望により,スティック逆
         swerveDriveTrainSubsystem.setDefaultCommand(
             new RunCommand(() -> swerveDriveTrainSubsystem.drive(
-                driverController.getLeftY(),
-                driverController.getLeftX(),
-                driverController.getRightX()
+                driverController.getRightY(), //右スティック縦軸
+                driverController.getRightX(), //右スティック横軸
+                driverController.getLeftX() //左スティック横軸
             ),swerveDriveTrainSubsystem)
         );
     }
@@ -62,13 +76,7 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-        // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-        new Trigger(exampleSubsystem::exampleCondition)
-            .onTrue(new ExampleCommand(exampleSubsystem));
-
-        // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-        // cancelling on release.
-        //driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
+        //速度調整用のボタンのコマンドをバインド(十字キー)
         SwerveDriveTrainSubsystem.getInstance().setControllerBindings(driverController);
     }
 
@@ -79,7 +87,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An example command will be run in autonomous
-        return Autos.exampleAuto(exampleSubsystem);
+        //Auto用のコマンド
+        return Autos.runOnlyForwardAuto(swerveDriveTrainSubsystem);
     }
 }
