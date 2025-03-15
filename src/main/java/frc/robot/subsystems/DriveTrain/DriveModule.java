@@ -6,6 +6,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -23,6 +24,8 @@ import java.util.Optional;
 
 //スワーブの車輪一個用のクラス
 public class DriveModule {
+
+    private final SwervePosition identifier;
 
     //機器類
     private final SparkMax driveMotor;
@@ -47,7 +50,7 @@ public class DriveModule {
                        int encoderPort,
                        Rotation2d offset
     ) {
-
+        this.identifier = pos;
         this.driveMotor = new SparkMax(driveMotorPort, SparkLowLevel.MotorType.kBrushless);
         this.steeringMotor = new SparkMax(steeringMotorPort, SparkLowLevel.MotorType.kBrushless);
         this.encoder = new CANcoder(encoderPort);
@@ -83,8 +86,14 @@ public class DriveModule {
         //角度の最適化(角度差π以上の場合π以下になるように調整)
         state.optimize(Rotation2d.fromRotations(encoder.getPosition().getValue().in(Units.Rotations)));
         //閉ループ制御で目標値をセット(出力はモータードライバーが調整
-        driveCloopController.setReference(state.speedMetersPerSecond, SparkBase.ControlType.kVelocity);
-        steeringCloopController.setReference(state.angle.getRadians(), SparkBase.ControlType.kPosition);
+        //System.out.println(state.speedMetersPerSecond);
+        driveMotor.set(state.speedMetersPerSecond);
+        if(this.identifier.toString().equals("FRONT_RIGHT"))
+            System.out.println();
+        double rotateOutput = state.angle.minus(Rotation2d.fromRotations(this.encoder.getAbsolutePosition().getValue().in(Units.Rotations))).getRotations();
+        this.steeringMotor.set(MathUtil.clamp(rotateOutput,-0.25,0.25));
+        //driveCloopController.setReference(state.speedMetersPerSecond, SparkBase.ControlType.kVelocity);
+        //steeringCloopController.setReference(state.angle.getRadians(), SparkBase.ControlType.kPosition);
         currentState = state;
         this.setWidget();
 
@@ -95,5 +104,9 @@ public class DriveModule {
         widget.setMotorState(driveMotor.getAppliedOutput(),steeringMotor.getAppliedOutput());
         widget.setEncoderValue(encoder.getAbsolutePosition().getValue().in(Units.Degree));
         widget.setSteeringEncoderWidget(steeringEncoder.getPosition());
+    }
+
+    public void MaenisusumudakenoAuto(){
+
     }
 }
