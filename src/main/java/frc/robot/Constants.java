@@ -49,6 +49,11 @@ public final class Constants
         public static final int REAR_LEFT = 14;
         public static final int REAR_RIGHT = 13;
     }
+    public static class ElevatorMotorPort{
+        public static final int ELEVATOR_MOTOR_PORT = 20;
+        public static final int ELEVATOR_SERVO_PORT = 21;
+    }
+
 
     //各モジュールの位置計算用(あんまり使ってない
     public enum moduleLocations {
@@ -76,7 +81,7 @@ public final class Constants
         //速度のデフォルト値(m/s)
         public static final double defaultSpeed = 0.2;
         //最大速度 (m/s)
-        public static final double maxMovementSpeed = 5.0;
+        public static final double maxMovementSpeed = 1.0;
         //角速度のデフォルト値,30 deg/s
         public static double defaultAngularSpeed = Math.PI / 6;
         //最大角速度, 360deg/s

@@ -23,8 +23,8 @@ public final class Config {
 
         drivingConfig.closedLoop.
             feedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder)
-            .pid(1.0, 0, 0) //ここは係数をいい感じに調整
-            .outputRange(-1, 1);
+            .pid(0.1, 0, 0) //ここは係数をいい感じに調整
+            .outputRange(-0.1, 0.1);
 
         steeringConfig
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
@@ -33,10 +33,10 @@ public final class Config {
             .positionConversionFactor(steeringFactor)
             .velocityConversionFactor(steeringFactor / 60.0);
 
-        steeringConfig.closedLoop.
-            feedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder)
-            .pid(1, 0, 0)
-            .outputRange(-1, 1)
+        steeringConfig.closedLoop
+            .feedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder)
+            .pid(0.01, 0, 0)
+            .outputRange(-0.1, 0.1)
             //例えば,350度から10度に向かう場合に,0度経由の遷移を可能にする
             .positionWrappingEnabled(true)
             .positionWrappingInputRange(0, steeringFactor);
