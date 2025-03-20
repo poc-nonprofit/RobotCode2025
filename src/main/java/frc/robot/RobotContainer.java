@@ -86,7 +86,7 @@ public class RobotContainer {
     private void configureBindings() {
         //速度調整用のボタンのコマンドをバインド(十字キー)
         swerveDriveTrainSubsystem.setControllerBindings(driverController);
-        elevatorSubsystem.setControllerBindings(driverController);
+        elevatorSubsystem.setControllerBindings(operatorController);
     }
 
 

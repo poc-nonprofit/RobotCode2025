@@ -52,7 +52,13 @@ public final class Constants
     public static class ElevatorMotor {
         public static final int ELEVATOR_MOTOR_PORT = 20;
         public static final int ELEVATOR_SERVO_PORT = 0;
-        public static final double ELEVATOR_SPEED = 0.05;
+        public static final double DEFAULT_ELEVATOR_SPEED = 0.20;
+    }
+    //サーボの設定 (角度)
+    public static class ElevatorServoConf {
+        public static final double DEFAULT_ANGLE = 0.0; //初期角度(度)
+        public static final double ROTATION_ANGLE = 120.0; //動いたときの角度
+        public static final double WAITING_TIME = 3.0; //
     }
 
 
