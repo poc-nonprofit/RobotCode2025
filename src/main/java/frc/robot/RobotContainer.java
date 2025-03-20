@@ -11,6 +11,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DriveTrain.SwerveDriveTrainSubsystem;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -30,6 +31,7 @@ public class RobotContainer {
     private final SwerveDriveTrainSubsystem swerveDriveTrainSubsystem = SwerveDriveTrainSubsystem.getInstance();
     //カメラサーバー
     private final CameraSubsystem cameraSubsystem = CameraSubsystem.getInstance();
+    private final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController driverController =
@@ -63,6 +65,12 @@ public class RobotContainer {
                 driverController.getLeftX() //左スティック横軸
             ),swerveDriveTrainSubsystem)
         );
+        //エレベーター用
+        elevatorSubsystem.setDefaultCommand(
+            new RunCommand(()-> elevatorSubsystem.moveElevator(
+                -operatorController.getLeftY()
+            ),elevatorSubsystem)
+        );
     }
 
 
@@ -77,7 +85,8 @@ public class RobotContainer {
      */
     private void configureBindings() {
         //速度調整用のボタンのコマンドをバインド(十字キー)
-        SwerveDriveTrainSubsystem.getInstance().setControllerBindings(driverController);
+        swerveDriveTrainSubsystem.setControllerBindings(driverController);
+        elevatorSubsystem.setControllerBindings(driverController);
     }
 
 

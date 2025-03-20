@@ -49,9 +49,10 @@ public final class Constants
         public static final int REAR_LEFT = 14;
         public static final int REAR_RIGHT = 13;
     }
-    public static class ElevatorMotorPort{
+    public static class ElevatorMotor {
         public static final int ELEVATOR_MOTOR_PORT = 20;
-        public static final int ELEVATOR_SERVO_PORT = 21;
+        public static final int ELEVATOR_SERVO_PORT = 0;
+        public static final double ELEVATOR_SPEED = 0.05;
     }
 
 
@@ -78,9 +79,9 @@ public final class Constants
         public static final double wheelRaduis = Units.Meters.convertFrom(5.08, Units.Centimeter);
         //モーター内蔵のエンコーダーの解像度(42カウント/一周)
         public static final int brushlessMotorResolution = 42;
-        //速度のデフォルト値(m/s)
+        //速度のデフォルト値(%)
         public static final double defaultSpeed = 0.2;
-        //最大速度 (m/s)
+        //最大速度 (%)
         public static final double maxMovementSpeed = 1.0;
         //角速度のデフォルト値,30 deg/s
         public static double defaultAngularSpeed = Math.PI / 6;
